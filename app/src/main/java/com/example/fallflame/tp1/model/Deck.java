@@ -1,9 +1,6 @@
-package com.example.fallflame.tp1;
+package com.example.fallflame.tp1.model;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 
 import java.util.Random;
 
@@ -14,7 +11,7 @@ public class Deck {
 
     private Card[] cards;
 
-    Deck(Context context){
+    Deck(){
        //twelve cards the zodiac
         Card[] _cards = {
                 new Card("rat"),
@@ -27,7 +24,8 @@ public class Deck {
                 new Card("goat"),
                 new Card("monkey"),
                 new Card("rooster"),
-                new Card("J")
+                new Card("dog"),
+                new Card("pig")
         };
 
         this.cards = _cards;
