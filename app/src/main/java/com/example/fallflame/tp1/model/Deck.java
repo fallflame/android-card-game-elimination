@@ -2,6 +2,8 @@ package com.example.fallflame.tp1.model;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -9,35 +11,39 @@ import java.util.Random;
  */
 public class Deck {
 
-    private Card[] cards;
+    //private Card[] cards;
+    private ArrayList<Card> cards = new ArrayList<>();
 
     Deck(){
-       //twelve cards the zodiac
-        Card[] _cards = {
-                new Card("rat"),
-                new Card("ox"),
-                new Card("tiger"),
-                new Card("rabbit"),
-                new Card("dragon"),
-                new Card("snake"),
-                new Card("horse"),
-                new Card("goat"),
-                new Card("monkey"),
-                new Card("rooster"),
-                new Card("dog"),
-                new Card("pig")
-        };
+        populateCards();
+    }
 
-        this.cards = _cards;
+    private void populateCards(){
+        //twelve cards the zodiac
+        this.cards.add(new Card("rat"));
+        this.cards.add(new Card("ox"));
+        this.cards.add(new Card("tiger"));
+        this.cards.add(new Card("rabbit"));
+        this.cards.add(new Card("dragon"));
+        this.cards.add(new Card("snake"));
+        this.cards.add(new Card("horse"));
+        this.cards.add(new Card("goat"));
+        this.cards.add(new Card("monkey"));
+        this.cards.add(new Card("rooster"));
+        this.cards.add(new Card("dog"));
+        this.cards.add(new Card("pig"));
+        Collections.shuffle(cards);
     }
 
     public Card drawRandomCard(){
 
-        Random random = new Random();
-        int num =random.nextInt(this.cards.length);
-        Card randomCard = cards[num];
+        if(cards.size() == 0){
+            populateCards();
+        }
 
-        return randomCard;
+        Card card = cards.get(0);
+        cards.remove(0);
+        return card;
     }
 
 }

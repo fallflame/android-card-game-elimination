@@ -7,6 +7,7 @@ import java.util.Random;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.util.Log;
 
 /**
  * Created by FallFlame on 15/1/27.
@@ -19,6 +20,7 @@ public class Game extends Observable {
 
 
     private boolean waitingForInput;
+    private boolean isGameOver;
 
     public Game(){
         final int CARDNUMBER = 24;
@@ -45,14 +47,15 @@ public class Game extends Observable {
 
     public void setPlayers(Player[] _players){
         players = _players;
+        for(int i=0; i<players.length; i++){
+            players[i].setGame(this);
+        }
     }
 
-    private Player currentPlayer(){
-        return players[currentPlayerIndex % players.length];
-    }
 
     public void nextChoose(){
-        System.out.println("Player " +  currentPlayerIndex % players.length + " is choosing.");
+        if(isGameOver) return;
+        Log.d("app","Player " + currentPlayerIndex % players.length + " is choosing.");
         currentPlayer().choose();
     }
 
@@ -65,7 +68,7 @@ public class Game extends Observable {
 
         final int MATCHSCORE = 1;
 
-        System.out.println("Card["+index+"]:" + cards[index].getName() + " is chosen");
+        Log.d("app", "Card["+index+"]:" + cards[index].getName() + " is chosen");
         cards[index].setChosen(true);
         setChanged();
         notifyObservers(new int[]{index});
@@ -74,22 +77,22 @@ public class Game extends Observable {
             if (cards[i] != null) {
                 if (cards[i] != cards[index] && cards[i].isChosen()) {
                     if (cards[i].getName() == cards[index].getName()) {
-                        System.out.println("Card["+i+ "]:" + cards[i].getName() + " is removed");
+                        Log.d("app", "Card["+i+ "]:" + cards[i].getName() + " is removed");
                         cards[i] = null;
-                        System.out.println("Card["+index+"]:" + cards[index].getName() + " is removed");
+                        Log.d("app", "Card["+index+"]:" + cards[index].getName() + " is removed");
                         cards[index] = null;
 
                         currentPlayer().addScore(MATCHSCORE);
-                        System.out.println("Player " +  currentPlayerIndex % players.length + " get " + MATCHSCORE + " score(s)." );
+                        Log.d("app", "Player " +  currentPlayerIndex % players.length + " get " + MATCHSCORE + " score(s)." );
                         setChanged();
                         notifyObservers(new int[]{i, index});
                     } else {
                         cards[i].setChosen(false);
-                        System.out.println("Card["+i+ "]:" + cards[i].getName() + " is set not chosen");
+                        Log.d("app", "Card["+i+ "]:" + cards[i].getName() + " is set not chosen");
                         cards[index].setChosen(false);
-                        System.out.println("Card["+index+"]:" + cards[index].getName() + " is set not chosen");
+                        Log.d("app", "Card["+index+"]:" + cards[index].getName() + " is set not chosen");
                         currentPlayerIndex++;
-                        System.out.println("Next player");
+                        Log.d("app", "Next player");
                         setChanged();
                         notifyObservers(new int[]{i, index});
                     }
@@ -106,19 +109,19 @@ public class Game extends Observable {
         }
 
         if (allCardsAreRemoved){
-            System.out.println("All cards are removed");
+            Log.d("app", "All cards are removed");
             gameOver();
         } else{
-            System.out.println("Next Choose");
             this.waitingForInput = false;
-            nextChoose();
+            //nextChoose();
         }
     }
 
     public void gameOver(){
-        System.out.println("Game Over");
+        isGameOver = true;
+        Log.d("app", "Game Over");
         for(int i=0; i<players.length; i++){
-            System.out.println("Player " + i + " has " + players[i].score + " score(s)" );
+            Log.d("app", "Player " + i + " has " + players[i].score + " score(s)" );
         }
     }
 
@@ -131,4 +134,25 @@ public class Game extends Observable {
     public void setWaitingForInput(boolean flag){
         this.waitingForInput = flag;
     }
+
+    public boolean isWaitingForInput(){
+        return this.waitingForInput;
+    }
+
+    private Player currentPlayer(){
+        return players[currentPlayerIndex % players.length];
+    }
+
+    public int getCurrentPlayerIndex(){
+        return currentPlayerIndex % players.length;
+    }
+
+    public int getPlayer0Score(){
+        return players[0].getScore();
+    }
+
+    public int getPlayer1Score(){
+        return players[1].getScore();
+    }
 }
+

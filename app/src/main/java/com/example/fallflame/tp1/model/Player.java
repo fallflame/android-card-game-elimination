@@ -5,7 +5,7 @@ package com.example.fallflame.tp1.model;
  */
 public abstract class Player {
 
-    protected int score;
+    protected int score = 0;
     protected Game game;
 
     public void setGame(Game _game){
@@ -16,6 +16,10 @@ public abstract class Player {
 
     public void addScore(int s){
         this.score += s;
+    }
+
+    public int getScore(){
+        return score;
     }
 
 }

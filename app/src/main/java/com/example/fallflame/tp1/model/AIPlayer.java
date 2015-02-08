@@ -14,48 +14,54 @@ public class AIPlayer extends Player implements Observer {
     @Override
     public void setGame(Game _game) {
         super.setGame(_game);
+        _game.addObserver(this);
         this.cards = new Card[this.game.getCards().length];
     }
 
     @Override
     public void choose() {
 
-        Card firstCard = null;
-        int i, j;
+        Random random = new Random();
 
-        for(i=0; i<cards.length; i++){
-            if (cards[i] != null) {
-                if (cards[i].isChosen()) {
-                    firstCard = cards[i];
-                    break;
+        if(random.nextInt(100) < 50) {
+            Card firstCard = null;
+            int i, j;
+
+            for (i = 0; i < cards.length; i++) {
+                if (cards[i] != null) {
+                    if (cards[i].isChosen()) {
+                        firstCard = cards[i];
+                        break;
+                    }
                 }
             }
-        }
 
-        if (firstCard == null){ // no cards is chosen
-            for(i=0; i<cards.length; i++){
-                for(j=0; j<cards.length; j++){
-                    if(cards[i] != null && cards[j] != null &&  i != j){
-                        if (cards[i].getName() == cards[j].getName()){
+            if (firstCard == null) { // no cards is chosen
+                for (i = 0; i < cards.length; i++) {
+                    for (j = 0; j < cards.length; j++) {
+                        if (cards[i] != null && cards[j] != null && i != j) {
+                            if (cards[i].getName() == cards[j].getName()) {
+                                game.currentPlayerChooseCard(i);
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else { // one cards is chosen
+                for (i = 0; i < cards.length; i++) {
+                    if (cards[i] != null) {
+                        if (cards[i] != firstCard && cards[i].getName() == firstCard.getName()) {
                             game.currentPlayerChooseCard(i);
                             return;
                         }
                     }
                 }
             }
-        } else { // one cards is chosen
-            for(i=0; i<cards.length; i++){
-                if(cards[i] != null) {
-                    if (cards[i] != firstCard && cards[i].getName() == firstCard.getName()) {
-                        game.currentPlayerChooseCard(i);
-                        return;
-                    }
-                }
-            }
         }
 
-        Random random = new Random();
+
         int randomIndex =random.nextInt(this.cards.length);
+
         game.currentPlayerChooseCard(randomIndex);
 
     }
