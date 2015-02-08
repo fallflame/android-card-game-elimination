@@ -1,6 +1,9 @@
 package com.example.fallflame.tp1;
 
 import android.animation.Animator;
+import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +34,7 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_view);
+        setContentView(R.layout.activity_game);
 
         AIPlayer player1 = new AIPlayer();
         HumainPlayer player2 = new HumainPlayer();
@@ -85,10 +88,26 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
         return super.onOptionsItemSelected(item);
     }
 
+    public void gameOver(){
+
+        SQLiteDatabase db = openOrCreateDatabase("cardGame.db", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS history (_id INTEGER PRIMARY KEY AUTOINCREMENT, records VARCHAR)");
+        db.execSQL("INSERT INTO history VALUES (NULL, ?)", new String[]{"Player1: " + game.getPlayer0Score() + ", Player2: " + game.getPlayer1Score() });
+
+        Log.d("GameController", "Process Game Over");
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void update(Observable observable, Object data) {
 
         //set the light and score
+
+        if (game.isGameOver()){
+            gameOver();
+            return;
+        }
 
         ImageView player0Light = (ImageView) findViewById(R.id.player0Light);
         ImageView player1Light = (ImageView) findViewById(R.id.player1Light);
@@ -182,8 +201,10 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            Log.d("app", "Next Choose");
-                            game.nextChoose();
+                            if(!game.isGameOver()) {
+                                Log.d("app", "Next Choose");
+                                game.nextChoose();
+                            }
                         }
 
                         @Override

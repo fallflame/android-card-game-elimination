@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Random;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
 import android.util.Log;
 
@@ -119,6 +120,8 @@ public class Game extends Observable {
 
     public void gameOver(){
         isGameOver = true;
+        setChanged();
+        notifyObservers();
         Log.d("app", "Game Over");
         for(int i=0; i<players.length; i++){
             Log.d("app", "Player " + i + " has " + players[i].score + " score(s)" );
@@ -127,6 +130,9 @@ public class Game extends Observable {
 
     /******* setter and getter after ***********/
 
+    public boolean isGameOver(){
+        return this.isGameOver;
+    }
     public Card[] getCards(){
         return this.cards;
     }
