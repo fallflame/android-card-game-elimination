@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class AIPlayer extends Player implements Observer {
 
-    Card[] cards;
+    private Card[] cards;
 
     @Override
     public void setGame(Game _game) {
