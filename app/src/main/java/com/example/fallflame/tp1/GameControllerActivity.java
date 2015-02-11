@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.fallflame.tp1.model.AIPlayer;
 import com.example.fallflame.tp1.model.Game;
-import com.example.fallflame.tp1.model.HumainPlayer;
+import com.example.fallflame.tp1.model.HumanPlayer;
 import com.example.fallflame.tp1.model.Player;
 
 import java.util.Observable;
@@ -33,14 +33,29 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("GameControllerActivity", "creating");
+
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String gameMode = intent.getStringExtra(WelcomeActivity.GAME_MODE);
+        Log.d("GameControllerActivity", "Game Mode: " + gameMode);
+
         setContentView(R.layout.activity_game);
 
-        AIPlayer player1 = new AIPlayer();
-        HumainPlayer player2 = new HumainPlayer();
         this.game = new Game();
         game.addObserver(this);
-        game.setPlayers(new Player[]{player1, player2});
+
+        if (gameMode.equals("HumanVsHuman")) {
+            game.setPlayers(new Player[]{new HumanPlayer(), new HumanPlayer()});
+        } else{
+            game.setPlayers(new Player[]{new HumanPlayer(), new AIPlayer()});
+        }
+
+        // AIPlayer player1 = new AIPlayer();
+        // HumanPlayer player2 = new HumanPlayer();
+        // game.setPlayers(new Player[]{player1, player2});
+
 
         this.cardViews = new ImageView[game.getCards().length];
 
@@ -92,9 +107,9 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
         SQLiteDatabase db = openOrCreateDatabase("cardGame.db", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS history (_id INTEGER PRIMARY KEY AUTOINCREMENT, records VARCHAR)");
-        db.execSQL("INSERT INTO history VALUES (NULL, ?)", new String[]{"Player1: " + game.getPlayer0Score() + ", Player2: " + game.getPlayer1Score() });
+        db.execSQL("INSERT INTO history VALUES (NULL, ?)", new String[]{ game.getPlayerNameByIndex(0)+ ": " + game.getPlayerScoreByIndex(0) + ", " + game.getPlayerNameByIndex(1) + ": " + game.getPlayerScoreByIndex(1) });
 
-        Log.d("GameController", "Process Game Over");
+        Log.d("GameController", "Processing Game Over");
         Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
@@ -122,8 +137,8 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
             player1Light.setBackgroundColor(0xff00ff00);
         }
 
-        player0Score.setText(Integer.toString(game.getPlayer0Score())); //Integer.toString(game.getPlayer0Score())
-        player1Score.setText(Integer.toString(game.getPlayer1Score()));
+        player0Score.setText(Integer.toString(game.getPlayerScoreByIndex(0)));
+        player1Score.setText(Integer.toString(game.getPlayerScoreByIndex(1)));
 
 
         if(data instanceof int[]){

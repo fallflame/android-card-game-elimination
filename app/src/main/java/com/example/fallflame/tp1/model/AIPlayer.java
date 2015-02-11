@@ -11,6 +11,10 @@ public class AIPlayer extends Player implements Observer {
 
     private Card[] cards;
 
+    public AIPlayer(){
+        this.name = "AI";
+    }
+
     @Override
     public void setGame(Game _game) {
         super.setGame(_game);

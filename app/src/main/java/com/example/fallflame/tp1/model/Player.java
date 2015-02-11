@@ -7,6 +7,7 @@ public abstract class Player {
 
     protected int score = 0;
     protected Game game;
+    protected String name = "Anonymous Player";
 
     public void setGame(Game _game){
         this.game = _game;
@@ -20,6 +21,10 @@ public abstract class Player {
 
     public int getScore(){
         return score;
+    }
+
+    public String getName(){
+        return name;
     }
 
 }

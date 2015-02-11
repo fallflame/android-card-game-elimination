@@ -124,7 +124,7 @@ public class Game extends Observable {
         notifyObservers();
         Log.d("app", "Game Over");
         for(int i=0; i<players.length; i++){
-            Log.d("app", "Player " + i + " has " + players[i].score + " score(s)" );
+            Log.d("app", players[i].getName() + " has " + players[i].score + " score(s)" );
         }
     }
 
@@ -153,12 +153,10 @@ public class Game extends Observable {
         return currentPlayerIndex % players.length;
     }
 
-    public int getPlayer0Score(){
-        return players[0].getScore();
+    public int getPlayerScoreByIndex(int i){
+        return players[i].getScore();
     }
 
-    public int getPlayer1Score(){
-        return players[1].getScore();
-    }
+    public String getPlayerNameByIndex(int i){ return players[1].getName(); }
 }
 
