@@ -27,4 +27,6 @@ public abstract class Player {
         return name;
     }
 
+    public void setName(String _name){ this.name = _name; }
+
 }

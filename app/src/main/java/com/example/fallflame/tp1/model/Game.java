@@ -158,5 +158,7 @@ public class Game extends Observable {
     }
 
     public String getPlayerNameByIndex(int i){ return players[i].getName(); }
+
+    public void setPlayerNameByIndex(int i, String _name) { this.players[i].setName(_name);}
 }
 

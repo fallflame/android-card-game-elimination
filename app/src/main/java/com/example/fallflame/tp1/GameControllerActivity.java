@@ -1,7 +1,9 @@
 package com.example.fallflame.tp1;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,20 +39,73 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
         Log.d("GameControllerActivity", "creating");
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game);
 
+
+        // get the game mode from the welcome activity
         Intent intent = getIntent();
         String gameMode = intent.getStringExtra(WelcomeActivity.GAME_MODE);
         Log.d("GameControllerActivity", "Game Mode: " + gameMode);
 
-        setContentView(R.layout.activity_game);
-
         this.game = new Game();
         game.addObserver(this);
 
+        // set the game mode
         if (gameMode.equals("HumanVsHuman")) {
+            // two human player
             game.setPlayers(new Player[]{new HumanPlayer(), new HumanPlayer()});
+
+            // an alert dialog ask the player's name
+
+            final EditText name1EditText = new EditText(this);
+            new AlertDialog.Builder(this)
+                    .setTitle("Please input player2's name")
+                    .setView(name1EditText)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            game.setPlayerNameByIndex(1, name1EditText.getText().toString());
+                            TextView player1Name = (TextView) findViewById(R.id.player1Name);
+                            player1Name.setText(game.getPlayerNameByIndex(1) + "'s score: ");
+                        }
+                    })
+                    .show();
+
+            final EditText name0EditText = new EditText(this);
+            new AlertDialog.Builder(this)
+                    .setTitle("Please input player1's name")
+                    .setView(name0EditText)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            game.setPlayerNameByIndex(0, name0EditText.getText().toString());
+                            TextView player0Name = (TextView) findViewById(R.id.player0Name);
+                            player0Name.setText(game.getPlayerNameByIndex(0) + "'s score: ");
+                        }
+                    })
+                    .show();
+
         } else{
+
+            //this first player is a human player, the second is an AI player
             game.setPlayers(new Player[]{new HumanPlayer(), new AIPlayer()});
+
+            // an alert dialog ask the player's name
+            final EditText nameEditText = new EditText(this);
+            new AlertDialog.Builder(this)
+                    .setTitle("Please input your name")
+                    .setView(nameEditText)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            game.setPlayerNameByIndex(0, nameEditText.getText().toString());
+                            TextView player0Name = (TextView) findViewById(R.id.player0Name);
+                            player0Name.setText(game.getPlayerNameByIndex(0) + "'s score: ");
+                        }
+                    })
+                    .show();
+            TextView player1Name = (TextView) findViewById(R.id.player1Name);
+            player1Name.setText(game.getPlayerNameByIndex(1) + "'s score: ");
         }
 
 

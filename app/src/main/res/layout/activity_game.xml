@@ -14,10 +14,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView" />
+        android:id="@+id/player0Name" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/player1Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -33,8 +33,8 @@
         android:text="0"
         android:id="@+id/player0Score"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
+        android:layout_toRightOf="@+id/player0Name"
+        android:layout_toEndOf="@+id/player0Name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,8 +44,8 @@
         android:id="@+id/player1Score"
         android:rotation="180"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/textView2"
-        android:layout_toStartOf="@+id/textView2" />
+        android:layout_toLeftOf="@+id/player1Name"
+        android:layout_toStartOf="@+id/player1Name" />
 
     <ImageView
         android:layout_width="32dp"

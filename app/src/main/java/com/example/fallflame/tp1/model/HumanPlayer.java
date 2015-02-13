@@ -8,6 +8,9 @@ public class HumanPlayer extends Player {
     public HumanPlayer(){
         this.name = "Player";
     }
+    public HumanPlayer(String _name){
+        this.name = _name;
+    }
 
     @Override
     public void choose() {
