@@ -157,6 +157,6 @@ public class Game extends Observable {
         return players[i].getScore();
     }
 
-    public String getPlayerNameByIndex(int i){ return players[1].getName(); }
+    public String getPlayerNameByIndex(int i){ return players[i].getName(); }
 }
 
