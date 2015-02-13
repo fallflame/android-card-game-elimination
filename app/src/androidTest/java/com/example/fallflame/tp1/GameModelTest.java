@@ -17,7 +17,10 @@ public class GameModelTest extends InstrumentationTestCase {
 
         game.setPlayers(new Player[]{player1, player2});
 
-        game.nextChoose();
+        do{
+            game.nextChoose();
+        }while(!game.isGameOver());
+
     }
 
 }

@@ -52,10 +52,6 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
             game.setPlayers(new Player[]{new HumanPlayer(), new AIPlayer()});
         }
 
-        // AIPlayer player1 = new AIPlayer();
-        // HumanPlayer player2 = new HumanPlayer();
-        // game.setPlayers(new Player[]{player1, player2});
-
 
         this.cardViews = new ImageView[game.getCards().length];
 
@@ -76,6 +72,7 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
             });
         }
 
+        //begin the game
         game.nextChoose();
 
     }
@@ -143,28 +140,31 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
         if(data instanceof int[]){
 
-            int[] indexes = (int[]) data;
+            final int[] indexes = (int[]) data;
 
             for(int i=0; i<indexes.length; i++){
 
                 final int index = indexes[i];
+                final int iInIndexes = i;
 
                 if(game.getCards()[index] != null) {
+                    //this card is not removed
 
                     if (game.getCards()[index].isChosen()) {
-
+                        //this card is set chosen
                         String cardName = game.getCards()[index].getName();
                         int resId = getResources().getIdentifier(cardName, "drawable", this.getPackageName());
                         cardViews[index].setImageDrawable(getResources().getDrawable(resId));
-                        cardViews[index].animate().alpha(1).setDuration(0).setListener(new Animator.AnimatorListener() {
+                        cardViews[index].animate().alpha(1).setDuration(100).setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
                             }
 
                             @Override
-                            public void onAnimationEnd(Animator animation) {;
-                                game.nextChoose();
+                            public void onAnimationEnd(Animator animation) {
+                                if(iInIndexes == indexes.length-1)
+                                    game.nextChoose();
                             }
 
                             @Override
@@ -181,6 +181,7 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
 
                     } else{
+                        //this card is set un chosen
                         cardViews[index].animate().alpha(1).setDuration(1000).setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -192,8 +193,8 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
                                 if(game.getCards()[index] != null) {
                                     cardViews[index].setImageDrawable(getResources().getDrawable(R.drawable.cardback));
                                 }
-                                Log.d("app", "Next Choose");
-                                game.nextChoose();
+                                if(iInIndexes == indexes.length-1)
+                                    game.nextChoose();
                             }
 
                             @Override
@@ -208,6 +209,8 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
                         });
                     }
                 }else{
+
+                    // this card is removed
                     cardViews[index].animate().alpha(0).setDuration(1000).setListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
@@ -217,8 +220,8 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if(!game.isGameOver()) {
-                                Log.d("app", "Next Choose");
-                                game.nextChoose();
+                                if(iInIndexes == indexes.length-1)
+                                    game.nextChoose();
                             }
                         }
 
