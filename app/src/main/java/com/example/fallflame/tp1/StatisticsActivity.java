@@ -20,13 +20,23 @@ public class StatisticsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_statistics);
 
         SQLiteDatabase db = openOrCreateDatabase("cardGame.db", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS history (_id INTEGER PRIMARY KEY AUTOINCREMENT, records VARCHAR)");
-        Cursor c = db.rawQuery("SELECT * FROM history", null);
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS scoreRecords (_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, score INTEGER)");
+
+        /*db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'Yan', 5)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'Yan', 10)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'AI', 6)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'AI', 12)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'Qian', 3)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, 'Qian', 8)");*/
+
+        //db.execSQL("CREATE TABLE IF NOT EXISTS history (_id INTEGER PRIMARY KEY AUTOINCREMENT, records VARCHAR)");
+        Cursor c = db.rawQuery("SELECT name, max(score) FROM scoreRecords GROUP BY name ORDER BY max(score) DESC", null);
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.records);
 
         Log.d("DB", c.getCount() + " record(s)");
         while (c.moveToNext()){
-            String record = c.getString(c.getColumnIndex("records"));
+            String record = c.getString(c.getColumnIndex("name")) + ": " + c.getString(c.getColumnIndex("max(score)"));
             TextView textView = new TextView(getBaseContext());
             textView.setTextColor(0xFF000000);
             textView.setText(record);

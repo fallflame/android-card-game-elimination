@@ -159,8 +159,9 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
     public void gameOver(){
 
         SQLiteDatabase db = openOrCreateDatabase("cardGame.db", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS history (_id INTEGER PRIMARY KEY AUTOINCREMENT, records VARCHAR)");
-        db.execSQL("INSERT INTO history VALUES (NULL, ?)", new String[]{ game.getPlayerNameByIndex(0)+ ": " + game.getPlayerScoreByIndex(0) + ", " + game.getPlayerNameByIndex(1) + ": " + game.getPlayerScoreByIndex(1) });
+        db.execSQL("CREATE TABLE IF NOT EXISTS scoreRecords (_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, score INTEGER)");
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, ?, ?)", new Object[]{game.getPlayerNameByIndex(0), game.getPlayerScoreByIndex(0)});
+        db.execSQL("INSERT INTO scoreRecords VALUES (NULL, ?, ?)", new Object[]{game.getPlayerNameByIndex(1), game.getPlayerScoreByIndex(1)});
 
         Log.d("GameController", "Processing Game Over");
         Intent intent = new Intent(this, StatisticsActivity.class);
