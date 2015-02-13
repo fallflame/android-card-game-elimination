@@ -35,4 +35,14 @@
         android:layout_marginTop="89dp"
         android:onClick="historyButton"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:id="@+id/exit"
+        android:onClick="exitButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/humanVsAI"
+        android:layout_alignStart="@+id/humanVsAI" />
+
 </RelativeLayout>

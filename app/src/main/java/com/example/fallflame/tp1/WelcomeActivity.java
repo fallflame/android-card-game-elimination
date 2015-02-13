@@ -1,5 +1,6 @@
 package com.example.fallflame.tp1;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -59,5 +60,9 @@ public class WelcomeActivity extends ActionBarActivity {
     public void historyButton(View view){
         Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
+    }
+
+    public void exitButton(View view){
+        this.finish();
     }
 }

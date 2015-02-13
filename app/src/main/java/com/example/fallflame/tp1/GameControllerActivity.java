@@ -297,4 +297,18 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
         }
     }
+
+    public void quitButton(View view){
+        final GameControllerActivity self = this;
+        new AlertDialog.Builder(this)
+                .setTitle("Quit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        self.finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 }
