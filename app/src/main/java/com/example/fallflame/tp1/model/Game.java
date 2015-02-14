@@ -12,6 +12,7 @@ import android.util.Log;
 
 /**
  * Created by FallFlame on 15/1/27.
+ * This is the logic of the game
  */
 public class Game extends Observable {
     private Card[] cards;

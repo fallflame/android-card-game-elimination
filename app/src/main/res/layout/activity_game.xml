@@ -281,11 +281,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="×"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="QUIT"
         android:id="@+id/quit"
         android:onClick="quitButton"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/player1Name"
+        android:layout_alignEnd="@+id/player1Name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="      "
+        android:id="@+id/tipsView"
+        android:layout_alignTop="@+id/player1Light"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

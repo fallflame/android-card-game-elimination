@@ -23,6 +23,9 @@ import com.example.fallflame.tp1.model.Game;
 import com.example.fallflame.tp1.model.HumanPlayer;
 import com.example.fallflame.tp1.model.Player;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,8 +34,10 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
 
     private Game game;
     private ImageView[] cardViews;
-    //private AnimationSet animation = new AnimationSet(true);
-    private long animationStartDelay = 0;
+
+    //used for show the tips
+    private ArrayList<String> tips = new ArrayList<>();
+    private boolean showTips = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,7 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
             // two human player
             game.setPlayers(new Player[]{new HumanPlayer(), new HumanPlayer()});
 
-            // an alert dialog ask the player's name
-
+            // two alert dialogs ask the player's name
             final EditText name1EditText = new EditText(this);
             new AlertDialog.Builder(this)
                     .setTitle("Please input player2's name")
@@ -106,6 +110,8 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
                     .show();
             TextView player1Name = (TextView) findViewById(R.id.player1Name);
             player1Name.setText(game.getPlayerNameByIndex(1) + "'s score: ");
+
+            showTips = true;
         }
 
 
@@ -156,6 +162,12 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
         return super.onOptionsItemSelected(item);
     }
 
+    private void addTips(String _tip){
+        if (tips.size() >= 4 )
+            tips.remove(0);
+        tips.add(_tip);
+    }
+
     public void gameOver(){
 
         SQLiteDatabase db = openOrCreateDatabase("cardGame.db", Context.MODE_PRIVATE, null);
@@ -171,13 +183,12 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
     @Override
     public void update(Observable observable, Object data) {
 
-        //set the light and score
-
         if (game.isGameOver()){
             gameOver();
             return;
         }
 
+        //set the light and score
         ImageView player0Light = (ImageView) findViewById(R.id.player0Light);
         ImageView player1Light = (ImageView) findViewById(R.id.player1Light);
         TextView player0Score = (TextView) findViewById(R.id.player0Score);
@@ -194,6 +205,15 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
         player0Score.setText(Integer.toString(game.getPlayerScoreByIndex(0)));
         player1Score.setText(Integer.toString(game.getPlayerScoreByIndex(1)));
 
+        // set the tips
+        if(showTips){
+            TextView tipsView = (TextView) findViewById(R.id.tipsView);
+            String tipsString = "";
+            for (String t : tips){
+                tipsString = tipsString + t + "\n";
+            }
+            tipsView.setText(tipsString);
+        }
 
         if(data instanceof int[]){
 
@@ -212,6 +232,7 @@ public class GameControllerActivity extends ActionBarActivity implements Observe
                         String cardName = game.getCards()[index].getName();
                         int resId = getResources().getIdentifier(cardName, "drawable", this.getPackageName());
                         cardViews[index].setImageDrawable(getResources().getDrawable(resId));
+                        addTips(cardName + " in: " + index);
                         cardViews[index].animate().alpha(1).setDuration(100).setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
